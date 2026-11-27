@@ -1,0 +1,21 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ <uses-permission android:name="android.permission.INTERNET"/>
+ <!-- Settings > Back up / Restore keep the backup file in Download/WygTV. -->
+ <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+ <!-- Settings > Check for updates installs a newer wygtv.apk over this one. -->
+ <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+ <uses-feature android:name="android.software.leanback" android:required="false"/>
+ <uses-feature android:name="android.hardware.touchscreen" android:required="false"/>
+ <application android:label="${appLabel}" android:theme="@android:style/Theme.Material.NoActionBar" android:usesCleartextTraffic="true" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:banner="@drawable/ic_banner" android:allowBackup="false" android:largeHeap="true">
+  <activity android:name=".MainActivity" android:exported="true" android:screenOrientation="landscape" android:supportsPictureInPicture="true" android:resizeableActivity="true" android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation">
+   <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LEANBACK_LAUNCHER"/></intent-filter>
+   <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
+  </activity>
+  <receiver android:name=".UpdateResultReceiver" android:exported="false"/>
+  <!-- Reopens WygTV after an in-app update replaced it (Android closes the app to install). -->
+  <receiver android:name=".UpdatedReceiver" android:exported="true">
+   <intent-filter><action android:name="android.intent.action.MY_PACKAGE_REPLACED"/></intent-filter>
+  </receiver>
+  <provider android:name=".ApkProvider" android:authorities="${applicationId}.update" android:exported="false" android:grantUriPermissions="true"/>
+ </application>
+</manifest>
