@@ -32,10 +32,10 @@ jobs:
           WYGTV_KEY_PASSWORD: ${{ secrets.WYGTV_KEY_PASSWORD }}
         run: |
           if [ -n "$WYGTV_KEYSTORE_B64" ]; then
-            echo "$WYGTV_KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/wygota.p12"
+            echo "$WYGTV_KEYSTORE_B64" | tr -d '[:space:]' | base64 -d > "$RUNNER_TEMP/wygota.p12"
             echo "WYGTV_KEYSTORE=$RUNNER_TEMP/wygota.p12" >> $GITHUB_ENV
             echo "WYGTV_KEY_PASSWORD=$WYGTV_KEY_PASSWORD" >> $GITHUB_ENV
-            echo "Keystore decoded"
+            echo "Keystore decoded ($(wc -c < "$RUNNER_TEMP/wygota.p12") bytes)"
           else
             echo "No keystore secret; building with debug key"
           fi
