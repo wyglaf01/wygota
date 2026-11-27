@@ -26,22 +26,43 @@ jobs:
         with:
           packages: platform-tools
 
+      - name: Decode signing keystore
+        env:
+          WYGTV_KEYSTORE_B64: ${{ secrets.WYGTV_KEYSTORE }}
+          WYGTV_KEY_PASSWORD: ${{ secrets.WYGTV_KEY_PASSWORD }}
+        run: |
+          if [ -n "$WYGTV_KEYSTORE_B64" ]; then
+            echo "$WYGTV_KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/wygota.p12"
+            echo "WYGTV_KEYSTORE=$RUNNER_TEMP/wygota.p12" >> $GITHUB_ENV
+            echo "WYGTV_KEY_PASSWORD=$WYGTV_KEY_PASSWORD" >> $GITHUB_ENV
+            echo "Keystore decoded"
+          else
+            echo "No keystore secret; building with debug key"
+          fi
+
       - name: Create Gradle wrapper
         working-directory: android
         run: |
           gradle wrapper --gradle-version 8.11.1
           chmod +x gradlew
 
-      - name: Build debug APK
+      - name: Build release APK
         working-directory: android
         env:
           WYGOTA_VERSION_CODE: ${{ github.run_number }}
-        run: ./gradlew assembleDebug --stacktrace
+        run: |
+          if [ -n "$WYGTV_KEYSTORE" ]; then
+            ./gradlew assembleRelease --stacktrace
+            cp app/build/outputs/apk/release/app-release.apk ../dist-src.apk
+          else
+            ./gradlew assembleDebug --stacktrace
+            cp app/build/outputs/apk/debug/app-debug.apk ../dist-src.apk
+          fi
 
-      - name: Rename APK
+      - name: Package APK
         run: |
           mkdir -p dist
-          cp android/app/build/outputs/apk/debug/app-debug.apk dist/wygota.apk
+          mv dist-src.apk dist/wygota.apk
           echo "{\"versionCode\": ${{ github.run_number }}, \"versionName\": \"1.0.${{ github.run_number }}\"}" > dist/version.json
 
       - name: Upload APK artifact
