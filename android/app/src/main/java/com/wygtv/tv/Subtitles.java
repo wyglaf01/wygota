@@ -97,7 +97,7 @@ final class Subtitles {
         cc.setScaleType(android.widget.ImageView.ScaleType.FIT_CENTER);
         cc.setFocusable(true);
         cc.setContentDescription("Subtitles / CC");
-        cc.setOnClickListener(x -> choose());
+        cc.setOnClickListener(x -> { set(!wanted); Toast.makeText(a, wanted ? "Subtitles on" : "Subtitles off", Toast.LENGTH_SHORT).show(); });
         row.addView(cc, row.indexOfChild(settings), settings.getLayoutParams());
         ccButton = cc;
         refreshCc();
