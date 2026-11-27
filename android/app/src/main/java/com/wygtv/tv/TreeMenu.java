@@ -111,13 +111,10 @@ final class TreeMenu {
             return true;
         }
         if (left && inside(f, scroll)) {
-            // Already in the sub-panel column. First Left does nothing (or stays), second Left returns to the main side panel.
+            // Already in the sub-panel column. Left goes back to the previous menu (same as Back).
             if (e.getAction() == KeyEvent.ACTION_DOWN) {
-                leftFromColumn++;
-                if (leftFromColumn >= 2) {
-                    leftFromColumn = 0;
-                    NavRail.open(a);
-                }
+                leftFromColumn = 0;
+                a.onBackPressed();
             }
             return true;
         }
