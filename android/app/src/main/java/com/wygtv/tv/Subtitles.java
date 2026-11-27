@@ -116,7 +116,7 @@ final class Subtitles {
     }
 
     static boolean defaultOn(SharedPreferences prefs, boolean live) {
-        return prefs.getBoolean(live ? PREF_LIVE : PREF_VOD, false);
+        return prefs.getBoolean(live ? PREF_LIVE : PREF_VOD, true);
     }
 
     boolean on() { return wanted; }
