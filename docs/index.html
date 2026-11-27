@@ -6,22 +6,24 @@
   <title>WygOTA · Live Antenna TV for Android TV & Fire TV</title>
   <style>
     :root, [data-theme="dark"] {
-      --bg: #0a1a0f;
-      --panel: #1a3d2a;
-      --accent: #6ee7b7;
-      --text: #ecfdf5;
-      --muted: #a7c4b5;
-      --star: rgba(255,255,255,0.7);
-      --btn-text: #052e16;
+      --bg: #111;
+      --panel: #222;
+      --accent: #fff;
+      --text: #eee;
+      --muted: #aaa;
+      --star: rgba(255,255,255,0.4);
+      --btn-text: #111;
+      --border: #444;
     }
     [data-theme="light"] {
-      --bg: #f0fdf4;
-      --panel: #d1fae5;
-      --accent: #047857;
-      --text: #052e16;
-      --muted: #3f6212;
-      --star: rgba(4,120,87,0.15);
-      --btn-text: #f0fdf4;
+      --bg: #fff;
+      --panel: #f5f5f5;
+      --accent: #111;
+      --text: #111;
+      --muted: #555;
+      --star: rgba(0,0,0,0.08);
+      --btn-text: #fff;
+      --border: #ddd;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -34,17 +36,9 @@
         radial-gradient(1px 1px at 70% 20%, var(--star) 50%, transparent 51%),
         radial-gradient(1.5px 1.5px at 40% 70%, var(--star) 50%, transparent 51%),
         radial-gradient(1px 1px at 85% 60%, var(--star) 50%, transparent 51%),
-        radial-gradient(1px 1px at 15% 80%, var(--star) 50%, transparent 51%),
-        linear-gradient(180deg, #05140c 0%, var(--bg) 40%, #0d2418 100%);
+        radial-gradient(1px 1px at 15% 80%, var(--star) 50%, transparent 51%);
       background-attachment: fixed;
       transition: background 0.3s, color 0.3s;
-    }
-    [data-theme="light"] body, body[data-theme="light"] {
-      background-image:
-        radial-gradient(1px 1px at 20% 30%, var(--star) 50%, transparent 51%),
-        radial-gradient(1px 1px at 70% 20%, var(--star) 50%, transparent 51%),
-        radial-gradient(1.5px 1.5px at 40% 70%, var(--star) 50%, transparent 51%),
-        linear-gradient(180deg, #d1fae5 0%, var(--bg) 40%, #ecfdf5 100%);
     }
     .theme-toggle {
       position: fixed;
@@ -63,16 +57,11 @@
     .hero {
       text-align: center;
       padding: 4.5rem 1.5rem 3.5rem;
-      background: linear-gradient(180deg, rgba(26,61,42,0.5) 0%, transparent 100%);
-    }
-    [data-theme="light"] .hero {
-      background: linear-gradient(180deg, rgba(209,250,229,0.6) 0%, transparent 100%);
     }
     .hero h1 {
       font-size: 3.8rem;
       color: var(--accent);
-      letter-spacing: 0.05em;
-      text-shadow: 0 0 20px rgba(110,231,183,0.4);
+      letter-spacing: 0.02em;
     }
     .hero p {
       font-size: 1.25rem;
@@ -85,33 +74,26 @@
       background: var(--accent);
       color: var(--btn-text);
       padding: 0.9rem 2rem;
-      border-radius: 12px;
+      border-radius: 8px;
       text-decoration: none;
       font-weight: 600;
       margin: 0.5rem;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 0 16px rgba(110,231,183,0.25);
+      transition: opacity 0.15s;
     }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 0 24px rgba(110,231,183,0.4); }
+    .btn:hover { opacity: 0.85; }
     .btn-secondary {
       background: transparent;
       color: var(--accent);
       border: 2px solid var(--accent);
-      box-shadow: none;
     }
     section { max-width: 900px; margin: 0 auto; padding: 3rem 1.5rem; }
     h2 { color: var(--accent); margin-bottom: 1rem; }
     .features { display: grid; gap: 1rem; }
     .feature {
-      background: rgba(26, 61, 42, 0.55);
-      border: 1px solid rgba(110, 231, 183, 0.25);
-      border-radius: 12px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 8px;
       padding: 1.25rem;
-      backdrop-filter: blur(4px);
-    }
-    [data-theme="light"] .feature {
-      background: rgba(209, 250, 229, 0.7);
-      border-color: rgba(4, 120, 87, 0.3);
     }
     .downloads { text-align: center; }
     footer {
@@ -127,7 +109,7 @@
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">Dark</button>
   <header class="hero">
     <h1>WygOTA</h1>
-    <p>Live over-the-air TV from your HDHomeRun tuner.<br>Signals from the air. Channels from the stars. No playlists. No movies. Just free local TV.</p>
+    <p>Live over-the-air TV from your HDHomeRun tuner.<br>No playlists. No movies. Just free local channels.</p>
     <a class="btn" href="https://github.com/wyglaf01/WygOTA/releases/latest" target="_blank">Download Android APK</a>
     <a class="btn btn-secondary" href="https://github.com/wyglaf01/WygOTA" target="_blank">View on GitHub</a>
   </header>
