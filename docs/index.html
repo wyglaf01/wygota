@@ -5,13 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WygOTA · Live Antenna TV for Android TV & Fire TV</title>
   <style>
-    :root {
+    :root, [data-theme="dark"] {
       --bg: #0a1a0f;
       --panel: #1a3d2a;
       --accent: #6ee7b7;
       --text: #ecfdf5;
       --muted: #a7c4b5;
       --star: rgba(255,255,255,0.7);
+      --btn-text: #052e16;
+    }
+    [data-theme="light"] {
+      --bg: #f0fdf4;
+      --panel: #d1fae5;
+      --accent: #047857;
+      --text: #052e16;
+      --muted: #3f6212;
+      --star: rgba(4,120,87,0.15);
+      --btn-text: #f0fdf4;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -27,11 +37,36 @@
         radial-gradient(1px 1px at 15% 80%, var(--star) 50%, transparent 51%),
         linear-gradient(180deg, #05140c 0%, var(--bg) 40%, #0d2418 100%);
       background-attachment: fixed;
+      transition: background 0.3s, color 0.3s;
     }
+    [data-theme="light"] body, body[data-theme="light"] {
+      background-image:
+        radial-gradient(1px 1px at 20% 30%, var(--star) 50%, transparent 51%),
+        radial-gradient(1px 1px at 70% 20%, var(--star) 50%, transparent 51%),
+        radial-gradient(1.5px 1.5px at 40% 70%, var(--star) 50%, transparent 51%),
+        linear-gradient(180deg, #d1fae5 0%, var(--bg) 40%, #ecfdf5 100%);
+    }
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--panel);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      font-size: 0.9rem;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .theme-toggle:hover { background: var(--accent); color: var(--btn-text); }
     .hero {
       text-align: center;
       padding: 4.5rem 1.5rem 3.5rem;
       background: linear-gradient(180deg, rgba(26,61,42,0.5) 0%, transparent 100%);
+    }
+    [data-theme="light"] .hero {
+      background: linear-gradient(180deg, rgba(209,250,229,0.6) 0%, transparent 100%);
     }
     .hero h1 {
       font-size: 3.8rem;
@@ -48,7 +83,7 @@
     .btn {
       display: inline-block;
       background: var(--accent);
-      color: #052e16;
+      color: var(--btn-text);
       padding: 0.9rem 2rem;
       border-radius: 12px;
       text-decoration: none;
@@ -74,6 +109,10 @@
       padding: 1.25rem;
       backdrop-filter: blur(4px);
     }
+    [data-theme="light"] .feature {
+      background: rgba(209, 250, 229, 0.7);
+      border-color: rgba(4, 120, 87, 0.3);
+    }
     .downloads { text-align: center; }
     footer {
       text-align: center;
@@ -85,6 +124,7 @@
   </style>
 </head>
 <body>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">Dark</button>
   <header class="hero">
     <h1>WygOTA</h1>
     <p>Live over-the-air TV from your HDHomeRun tuner.<br>Signals from the air. Channels from the stars. No playlists. No movies. Just free local TV.</p>
@@ -136,5 +176,20 @@
     WygOTA is the antenna-only companion to <a href="https://wyglaf01.github.io/WygTV-AndroidTV/">WygTV</a>.<br>
     Made by Wyglaf · <a href="https://github.com/wyglaf01/WygOTA">Source on GitHub</a>
   </footer>
+
+  <script>
+    const btn = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const saved = localStorage.getItem('wygota-theme') || 'dark';
+    root.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? 'Light' : 'Dark';
+
+    btn.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('wygota-theme', next);
+      btn.textContent = next === 'dark' ? 'Light' : 'Dark';
+    });
+  </script>
 </body>
 </html>
