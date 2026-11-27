@@ -40,6 +40,23 @@
       background-attachment: fixed;
       transition: background 0.3s, color 0.3s;
     }
+    nav {
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      z-index: 5;
+    }
+    nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    nav a:hover { color: var(--accent); }
     .theme-toggle {
       position: fixed;
       top: 1rem;
@@ -96,6 +113,18 @@
       padding: 1.25rem;
     }
     .downloads { text-align: center; }
+    .code {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      word-break: break-all;
+      margin: 0.5rem 0;
+    }
+    ol { text-align: left; max-width: 600px; margin: 1rem auto; }
+    ol li { margin: 0.5rem 0; }
     footer {
       text-align: center;
       padding: 2rem;
@@ -107,14 +136,19 @@
 </head>
 <body>
   <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">Dark</button>
+  <nav>
+    <a href="#what">What it does</a>
+    <a href="#download">Download</a>
+    <a href="https://github.com/wyglaf01/WygOTA" target="_blank">GitHub</a>
+  </nav>
   <header class="hero">
     <h1>WygOTA</h1>
     <p>Live over-the-air TV from your HDHomeRun tuner.<br>No playlists. No movies. Just free local channels.</p>
-    <a class="btn" href="https://github.com/wyglaf01/WygOTA/releases/latest" target="_blank">Download Android APK</a>
+    <a class="btn" href="#download">Download</a>
     <a class="btn btn-secondary" href="https://github.com/wyglaf01/WygOTA" target="_blank">View on GitHub</a>
   </header>
 
-  <section>
+  <section id="what">
     <h2>What it does</h2>
     <div class="features">
       <div class="feature">
@@ -136,17 +170,32 @@
     </div>
   </section>
 
-  <section class="downloads">
-    <h2>Downloads</h2>
+  <section id="download" class="downloads">
+    <h2>Download</h2>
     <p style="margin-bottom: 1.5rem; color: var(--muted);">
-      Latest Android APK is published with each release.
+      Free. The link always points at the newest build.
     </p>
+
+    <h3>📺 Android TV, Fire TV & tablets</h3>
+    <p>For Google TV, Android TV boxes, NVIDIA Shield, Fire TV Stick and Fire TV Cube, and Android tablets.</p>
     <a class="btn" href="https://github.com/wyglaf01/WygOTA/releases/latest/download/wygota.apk" target="_blank">
-      Download wygota.apk
+      ⬇ wygota.apk
     </a>
-    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--muted);">
-      Requires Android 6.0+ / Fire OS. Enable “Install unknown apps” if needed.
-    </p>
+    <p style="margin-top: 1rem;">Direct link:</p>
+    <div class="code">https://github.com/wyglaf01/WygOTA/releases/latest/download/wygota.apk</div>
+    <p style="font-size: 0.9rem; color: var(--muted);">Requires Android 6.0+ / Fire OS. Enable “Install unknown apps” if needed.</p>
+
+    <h3 style="margin-top: 2.5rem;">🔥 Install on Fire TV with Downloader</h3>
+    <p>Fire TV can't install apps from the web on its own, so use the free <strong>Downloader</strong> app by AFTVnews.</p>
+    <ol>
+      <li><strong>Install Downloader.</strong> On the Fire TV home screen choose Find → Search, type <strong>Downloader</strong>, and install the orange app.</li>
+      <li><strong>Allow it to install apps.</strong> Go to Settings → My Fire TV → Developer options → Install unknown apps and turn <strong>Downloader</strong> on.<br>No Developer options? Open Settings → My Fire TV → About and press OK on your device name 7 times.</li>
+      <li><strong>Enter the address.</strong> Open Downloader and in the URL box type:<br>
+        <div class="code">https://github.com/wyglaf01/WygOTA/releases/latest/download/wygota.apk</div>
+        then press <strong>Go</strong>.</li>
+      <li><strong>Install.</strong> When the download finishes, choose <strong>Install</strong>, then <strong>Done</strong>.</li>
+      <li><strong>Open WygOTA</strong> from Your Apps & Games and follow the setup.</li>
+    </ol>
   </section>
 
   <section>
