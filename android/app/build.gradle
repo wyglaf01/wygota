@@ -1,0 +1,65 @@
+plugins { id 'com.android.application' }
+
+// WygOTA — antenna-TV-only app (com.wygtv.ota)
+// Extracted from the original WygTV monorepo. Always builds as WygOTA.
+
+android {
+    namespace 'com.wygtv.tv'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.wygtv.ota'
+        minSdk 23
+        targetSdk 28
+        versionCode((System.getenv('WYGOTA_VERSION_CODE') ?: System.getenv('GITHUB_RUN_NUMBER') ?: '1') as int)
+        versionName "1.0.${System.getenv('WYGOTA_VERSION_CODE') ?: System.getenv('GITHUB_RUN_NUMBER') ?: '0'}"
+        manifestPlaceholders = [appLabel: 'WygOTA']
+        buildConfigField 'boolean', 'OTA', 'true'
+        buildConfigField 'boolean', 'STORE', 'false'
+        // Unused in OTA mode but kept so shared code compiles cleanly.
+        buildConfigField 'String', 'TMDB_API_KEY', "\"\""
+        buildConfigField 'String', 'OMDB_API_KEY', "\"\""
+    }
+
+    buildFeatures { buildConfig true }
+
+    // Antenna icons and branding
+    sourceSets {
+        main {
+            res.srcDirs = ['src/main/res', 'src/wygota/res']
+        }
+    }
+
+    lint { warning 'ExpiredTargetSdkVersion' }
+
+    // Optional permanent signing key (CI secrets). Local builds fall back to the debug key.
+    def wygtvKey = System.getenv('WYGTV_KEYSTORE')
+    if (wygtvKey && file(wygtvKey).exists()) {
+        signingConfigs {
+            wygtv {
+                storeFile file(wygtvKey); storeType 'pkcs12'
+                storePassword System.getenv('WYGTV_KEY_PASSWORD')
+                keyAlias 'wygtv'; keyPassword System.getenv('WYGTV_KEY_PASSWORD')
+            }
+        }
+        buildTypes {
+            debug { signingConfig signingConfigs.wygtv }
+            release { signingConfig signingConfigs.wygtv }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20231013'
+    implementation 'androidx.media3:media3-exoplayer:1.9.0'
+    implementation 'androidx.media3:media3-ui:1.9.0'
+    implementation 'androidx.media3:media3-exoplayer-hls:1.9.0'
+    // FFmpeg audio (AC-3 / E-AC-3) for HDHomeRun OTA
+    implementation 'org.jellyfin.media3:media3-ffmpeg-decoder:1.9.0+1'
+}
