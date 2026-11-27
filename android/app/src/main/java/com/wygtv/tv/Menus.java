@@ -67,7 +67,7 @@ final class Menus {
         TextView xtream = a.homeTile("⚙", "Xtream Codes\nserver + username", tiles, () -> xtreamForm(a, null, null));
         a.homeTile("☰", "M3U link\nplaylist URL", tiles, () -> m3uForm(a, null));
         a.homeTile("📡", "HDHomeRun\nantenna TV tuner", tiles, () -> hdhrForm(a, null));
-        a.homeTile("📡", "Tablo\nantenna TV DVR", tiles, () -> tabloMenu(a, () -> setup(a)));
+        if (!Brand.OTA) a.homeTile("📡", "Tablo\nantenna TV DVR", tiles, () -> tabloMenu(a, () -> setup(a)));
         a.homeTile("↺", "Restore\nfrom a backup", tiles, () -> Backup.restore(a));
         for (int i = 0; i < tiles.getChildCount(); i++) ((TextView) tiles.getChildAt(i)).setTextSize(21);
         xtream.requestFocus();
@@ -618,7 +618,7 @@ final class Menus {
             final int airRow = list.getChildCount();
             row(a, list, "AirTV antenna TV", AirTv.summary(a), () -> AirTv.settings(a, () -> settings(a, airRow)));
             final int tabloRow = list.getChildCount();
-            row(a, list, "Tablo antenna TV", tabloSummary(a), () -> tabloMenu(a, () -> settings(a, tabloRow)));
+            if (!Brand.OTA) row(a, list, "Tablo antenna TV", tabloSummary(a), () -> tabloMenu(a, () -> settings(a, tabloRow)));
             final int catsRow = list.getChildCount();
             row(a, list, "Manage categories", Manage.categorySummary(a) + "  •  press OK to tick the categories to show, playlist by playlist",
                     () -> Manage.categories(a, () -> settings(a, catsRow)));

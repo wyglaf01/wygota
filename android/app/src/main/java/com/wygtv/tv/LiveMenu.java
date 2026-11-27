@@ -64,7 +64,7 @@ final class LiveMenu {
         a.sideFixed = 1;
         a.button("⌕ Search", a.side, a::searchLive);
         if (AirTv.isOn(a.prefs)) a.button("📡 " + AirTv.nameOf(a.prefs), a.side, () -> AirTv.open(a)); // opens Sling (AirTV has no open channel list)
-        if (TabloApp.isOn(a.prefs)) a.button("📡 " + TabloApp.nameOf(a.prefs), a.side, () -> TabloApp.open(a)); // opens the Tablo app (4th Gen)
+        if (!Brand.OTA && TabloApp.isOn(a.prefs)) a.button("📡 " + TabloApp.nameOf(a.prefs), a.side, () -> TabloApp.open(a)); // opens the Tablo app (4th Gen)
         JSONArray mine = VirtualCategories.all(a);
         for (int i = 0; i < mine.length(); i++) {
             JSONObject c = mine.optJSONObject(i);
@@ -384,7 +384,7 @@ final class LiveMenu {
         compact(a, "★", "Favorites", false, () -> backTo(a, "fav"));
         compact(a, "⌕", "Search", false, a::searchLive);
         if (AirTv.isOn(a.prefs)) compact(a, "📡", AirTv.nameOf(a.prefs), false, () -> AirTv.open(a));
-        if (TabloApp.isOn(a.prefs)) compact(a, "📡", TabloApp.nameOf(a.prefs), false, () -> TabloApp.open(a));
+        if (!Brand.OTA && TabloApp.isOn(a.prefs)) compact(a, "📡", TabloApp.nameOf(a.prefs), false, () -> TabloApp.open(a));
         JSONArray mine = VirtualCategories.all(a);
         for (int i = 0; i < mine.length(); i++) {
             JSONObject c = mine.optJSONObject(i);
