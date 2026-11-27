@@ -12,8 +12,8 @@ final class Brand {
     static final boolean STORE = BuildConfig.STORE;
     /** "WygTV" or "WygOTA", for anything the person reads. */
     static final String NAME = OTA ? "WygOTA" : "WygTV";
-    /** Where WygOTA updates from: every CI build on `app` publishes wygota.apk and version.json there. */
-    static final String OTA_RELEASE = "https://github.com/wyglaf01/WygTV-AndroidTV/releases/download/wygota-latest/";
+    /** Where WygOTA updates from: every release publishes wygota.apk and version.json there. */
+    static final String OTA_RELEASE = "https://github.com/wyglaf01/WygOTA/releases/download/v1.0.0/";
     static final String OTA_APK = "wygota.apk";
 
     private Brand() { }
