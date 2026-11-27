@@ -70,7 +70,7 @@ final class Manage {
     static void categories(MainActivity a, JSONObject startAt, Runnable after) { categories(a, startAt, null, after); }
 
     /**
-     * Opens the full-screen category page. The left column lists every playlist (HDHomeRun tuners aside) with its
+     * Opens the full-screen category page. The left column lists every playlist (including HDHomeRun tuners) with its
      * Live TV / Movies / Series under it (just Live TV for M3U playlists and in Live-TV-only mode), so each
      * playlist's categories are hidden or shown separately. {@code startAt} picks the playlist to open on.
      */
@@ -79,7 +79,7 @@ final class Manage {
         JSONArray all = a.library.all();
         for (int i = 0; i < all.length(); i++) {
             JSONObject p = all.optJSONObject(i);
-            if (p == null || Library.isHdhr(p)) continue;
+            if (p == null) continue;
             // Movies / Series only: M3U playlists have none.
             if (onlySection != null && !onlySection.equals("live") && Library.M3U.equals(p.optString("type"))) continue;
             pls.add(p);

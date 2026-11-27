@@ -87,7 +87,7 @@ final class Menus {
         View focus = null;
         for (int i = 0; i < all.length(); i++) {
             JSONObject p = all.optJSONObject(i);
-            if (p == null || Library.isHdhr(p)) continue; // tuners are managed in Settings > HDHomeRun antenna TV
+            if (p == null) continue;
             boolean on = a.library.isOn(p);
             String updated = on ? AutoRefresh.playlistLine(a, p) : "";
             TextView row = a.button((on ? "☑  " : "☐  ") + p.optString("title", "Playlist") + (on ? "" : "   (off)") + "\n      " + describe(p) + (updated.isEmpty() ? "" : "  •  " + updated), list, () -> playlistActions(a, p));
