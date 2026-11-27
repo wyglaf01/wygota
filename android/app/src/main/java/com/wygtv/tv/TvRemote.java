@@ -49,8 +49,9 @@ final class TvRemote {
     // Overlays.
     private LinearLayout banner;
     private TextView bannerLogo, bannerTitle, bannerSource, bannerNow, bannerNext, numberBox;
+    private TextView topInfo;
     private String typed = "";
-    private final Runnable hideBanner = () -> { if (banner != null) banner.setVisibility(View.GONE); };
+    private final Runnable hideBanner = () -> { if (banner != null) banner.setVisibility(View.GONE); if (topInfo != null) topInfo.setVisibility(View.GONE); };
     private final Runnable commitNumber = this::commitNumber;
 
     // Series: the "Up next" card shown near the end of an episode. OK plays the next episode, Back hides the card;
@@ -144,6 +145,14 @@ final class TvRemote {
         frame.setBackgroundColor(0xff000000);
         frame.addView(playerView, new FrameLayout.LayoutParams(-1, -1));
         buildBanner(frame);
+        topInfo = text("", 14, Theme.TEXT, false);
+        topInfo.setSingleLine(true);
+        topInfo.setPadding(a.dp(16), a.dp(8), a.dp(16), a.dp(8));
+        topInfo.setBackground(panel());
+        topInfo.setVisibility(View.GONE);
+        FrameLayout.LayoutParams tip = new FrameLayout.LayoutParams(-2, -2, Gravity.TOP | Gravity.START);
+        tip.setMargins(a.dp(24), a.dp(16), 0, 0);
+        frame.addView(topInfo, tip);
         numberBox = text("", 44, Theme.ACCENT, true);
         numberBox.setGravity(Gravity.CENTER);
         numberBox.setBackground(panel());
@@ -235,6 +244,27 @@ final class TvRemote {
 
     private boolean upNextShowing() { return upNext != null && upNext.getVisibility() == View.VISIBLE; }
 
+    /** Video resolution, codec, and bitrate if available. */
+    private String videoDetails() {
+        if (a.player == null) return "";
+        try {
+            androidx.media3.common.Format f = a.player.getVideoFormat();
+            if (f == null) return "";
+            StringBuilder s = new StringBuilder();
+            if (f.width > 0 && f.height > 0) s.append(f.width).append("×").append(f.height);
+            if (f.sampleMimeType != null) {
+                String codec = f.sampleMimeType.replace("video/", "").toUpperCase();
+                if (s.length() > 0) s.append("  ");
+                s.append(codec);
+            }
+            if (f.bitrate > 0) {
+                if (s.length() > 0) s.append("  ");
+                s.append(f.bitrate / 1000).append(" kbps");
+            }
+            return s.toString();
+        } catch (Exception e) { return ""; }
+    }
+
     private void showBanner() {
         if (banner == null) return;
         JSONObject ch = channel();
@@ -245,6 +275,13 @@ final class TvRemote {
         String source = Library.sourceLabel(a.library.find(a.library.activeId()));
         bannerSource.setText(source.isEmpty() ? "" : "Source  " + source);
         bannerSource.setVisibility(source.isEmpty() ? View.GONE : View.VISIBLE);
+        // Top info: video details and source
+        if (topInfo != null) {
+            String video = videoDetails();
+            String info = video.isEmpty() ? source : video + "  ·  " + source;
+            topInfo.setText(info);
+            topInfo.setVisibility(info.isEmpty() ? View.GONE : View.VISIBLE);
+        }
         banner.setVisibility(View.VISIBLE);
         ui.removeCallbacks(hideBanner);
         ui.postDelayed(hideBanner, BANNER_MS);
