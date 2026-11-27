@@ -13,7 +13,7 @@ final class Brand {
     /** "WygTV" or "WygOTA", for anything the person reads. */
     static final String NAME = OTA ? "WygOTA" : "WygTV";
     /** Where WygOTA updates from: every release publishes wygota.apk and version.json there. */
-    static final String OTA_RELEASE = "https://github.com/wyglaf01/WygOTA/releases/download/v1.0.0/";
+    static final String OTA_RELEASE = "https://github.com/wyglaf01/WygOTA/releases/latest/download/";
     static final String OTA_APK = "wygota.apk";
 
     private Brand() { }
