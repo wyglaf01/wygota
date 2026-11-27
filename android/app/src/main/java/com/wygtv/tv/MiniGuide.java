@@ -158,7 +158,7 @@ final class MiniGuide {
         }
     }
 
-    private static final int CHANNEL_DP = 200, ROW_DP = 48, HEADER_DP = 30;
+    private static final int CHANNEL_DP = 200, ROW_DP = 64, HEADER_DP = 36;
 
     /** Height in dp of the guide area showing this many channel rows. */
     static int height(int rows) { return HEADER_DP + Math.max(3, Math.min(5, rows)) * (ROW_DP + 4) + 6; }
@@ -179,7 +179,7 @@ final class MiniGuide {
         // The channel's logo, its name and (small, underneath) its category.
         boolean hiddenCh = GuideOptions.isHidden(a, item);
         String top = starred(a, item) + title, sub = hiddenCh ? "Hidden" : categoryOf(a, item);
-        TextView name = a.label(top, 15);
+        TextView name = a.label(top, 18);
         name.setMaxLines(2);
         if (!sub.isEmpty()) {
             android.text.SpannableString two = new android.text.SpannableString(top + "\n" + sub);
@@ -295,7 +295,7 @@ final class MiniGuide {
     }
 
     private static TextView cell(MainActivity a, String text, boolean airing, boolean rowFocused) {
-        TextView v = a.label(text, 14);
+        TextView v = a.label(text, 16);
         v.setSingleLine(true);
         v.setEllipsize(TextUtils.TruncateAt.END);
         v.setPadding(a.dp(8), 0, a.dp(6), 0);

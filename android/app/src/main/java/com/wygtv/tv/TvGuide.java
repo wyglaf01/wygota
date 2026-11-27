@@ -40,7 +40,7 @@ import org.json.JSONObject;
  * OK opens the channel full screen; Back from the player returns here.
  */
 final class TvGuide {
-    private static final int PAGE = 40;
+    private static final int PAGE = 8;
     private static final long HORIZON = 24 * 60 * EpgGrid.MINUTE;
 
     private final MainActivity a;
@@ -323,11 +323,11 @@ final class TvGuide {
         JSONObject ch = channels.optJSONObject(i);
         if (ch == null) return;
         LinearLayout row = new LinearLayout(a);
-        rows.addView(row, new LinearLayout.LayoutParams(-1, a.dp(40)));
+        rows.addView(row, new LinearLayout.LayoutParams(-1, a.dp(56)));
         // Just the channel's logo, its name and (small, underneath) its category; hold OK on a programme for ★ Favorites.
         boolean hiddenCh = GuideOptions.isHidden(a, ch);
         String chLabel = ch.optString("name", "Channel"), sub = hiddenCh ? "Hidden" : subLabel(i);
-        TextView name = text(chLabel, 14, Theme.TEXT, true);
+        TextView name = text(chLabel, 18, Theme.TEXT, true);
         name.setSingleLine(true);
         if (!sub.isEmpty()) {
             android.text.SpannableString two = new android.text.SpannableString(chLabel + "\n" + sub);
@@ -400,13 +400,13 @@ final class TvGuide {
         EpgGrid.Program p = c.program;
         String title = p == null ? (loading ? "Loading guide…" : "No guide information")
                 : (p.start < winStart ? "‹ " : "") + (p.title.isEmpty() ? "Untitled" : p.title) + (p.end > winEnd ? " ›" : "");
-        TextView t = text(title, 14, Theme.TEXT, true);
+        TextView t = text(title, 16, Theme.TEXT, true);
         t.setSingleLine(true);
         t.setEllipsize(TextUtils.TruncateAt.END);
         v.addView(t);
         TextView sub = null;
         if (width > a.dp(90)) {
-            sub = text(p == null ? "Press OK to watch" : fmt(p.start) + " – " + fmt(p.end), 11, Theme.MUTED, false);
+            sub = text(p == null ? "Press OK to watch" : fmt(p.start) + " – " + fmt(p.end), 13, Theme.MUTED, false);
             sub.setSingleLine(true);
             v.addView(sub);
         }
