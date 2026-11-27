@@ -22,6 +22,7 @@ final class TreeMenu {
     private static TextView current;
     private static View main;
     private static View lastMain;
+    private static int leftFromColumn = 0;
 
     private TreeMenu() { }
 
@@ -103,18 +104,32 @@ final class TreeMenu {
         if (left && inside(f, main)) {
             if (e.getAction() == KeyEvent.ACTION_DOWN) {
                 lastMain = f;
+                leftFromColumn = 0;
                 if (current != null) current.requestFocus();
                 else focusFirst(column);
             }
             return true;
         }
+        if (left && inside(f, scroll)) {
+            // Already in the sub-panel column. First Left does nothing (or stays), second Left returns to the main side panel.
+            if (e.getAction() == KeyEvent.ACTION_DOWN) {
+                leftFromColumn++;
+                if (leftFromColumn >= 2) {
+                    leftFromColumn = 0;
+                    NavRail.open(a);
+                }
+            }
+            return true;
+        }
         if (!left && inside(f, scroll)) {
             if (e.getAction() == KeyEvent.ACTION_DOWN) {
+                leftFromColumn = 0;
                 if (lastMain != null && lastMain.isAttachedToWindow() && lastMain.isShown() && inside(lastMain, main)) lastMain.requestFocus();
                 else if (main instanceof android.view.ViewGroup) focusFirst((android.view.ViewGroup) main);
             }
             return true;
         }
+        leftFromColumn = 0;
         return false;
     }
 
