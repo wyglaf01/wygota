@@ -344,7 +344,7 @@ final class Manage {
             LinearLayout root = new LinearLayout(a);
             root.setOrientation(LinearLayout.VERTICAL);
             root.setPadding(a.dp(24), a.dp(14), a.dp(24), a.dp(12));
-            root.setBackground(new SteampunkBackdrop(a.getResources(), R.drawable.steampunk_panel, false));
+            root.setBackground(new android.graphics.drawable.ColorDrawable(0xff111111));
             a.setContentView(root);
 
             TextView h = a.label(title, 22);

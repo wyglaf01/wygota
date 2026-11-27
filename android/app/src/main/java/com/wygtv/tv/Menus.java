@@ -41,7 +41,7 @@ final class Menus {
         a.mode = "setup";
         a.screenGeneration++;
         FrameLayout scene = new FrameLayout(a);
-        scene.setBackground(new SteampunkBackdrop(a.getResources(), R.drawable.steampunk_home, true));
+        scene.setBackground(new android.graphics.drawable.ColorDrawable(0xff111111));
         a.setContentView(scene);
         LinearLayout center = new LinearLayout(a);
         center.setOrientation(LinearLayout.VERTICAL);

@@ -55,7 +55,7 @@ final class Showcase {
         final int generation = a.screenGeneration;
         FrameLayout scene = new FrameLayout(a);
         View frame = NavRail.wrap(a, scene, "home");
-        frame.setBackground(new SteampunkBackdrop(a.getResources(), R.drawable.steampunk_home, true));
+        frame.setBackground(new android.graphics.drawable.ColorDrawable(0xff111111));
         a.setContentView(frame);
 
         // The highlighted title's picture fills the back of the screen.
