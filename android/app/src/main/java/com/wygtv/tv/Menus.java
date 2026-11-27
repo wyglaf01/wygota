@@ -1,1 +1,4 @@
-$(cat /tmp/Menus.java)
+package com.wygtv.tv;
+
+// Restored placeholder - full file to be updated
+final class Menus { }
