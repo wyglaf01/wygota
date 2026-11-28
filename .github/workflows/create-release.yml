@@ -1,0 +1,36 @@
+name: Create Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g. 1.0.71)'
+        required: true
+        type: string
+      notes:
+        description: 'Release notes'
+        required: false
+        type: string
+        default: 'Desktop builds (Ubuntu + Windows) added.\n\n- Minimal desktop entry point (OtaDesktop)\n- Website download buttons for Ubuntu and Windows'
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create tag and release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ github.event.inputs.version }}
+          name: WygOTA ${{ github.event.inputs.version }}
+          body: |
+            ${{ github.event.inputs.notes }}
+
+            **Full Changelog**: https://github.com/wyglaf01/wygota/compare/v1.0.70...v${{ github.event.inputs.version }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
