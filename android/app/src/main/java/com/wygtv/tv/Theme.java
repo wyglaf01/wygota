@@ -52,8 +52,7 @@ final class Theme {
         return k == null || k.equals("blue") ? DEFAULT : k;
     }
 
-    /** Glass effect is disabled; solid panels are always used. */
-    static final String PREF_GLASS = "glass_effect";
+    /** Glass effect removed; solid panels are always used. */
     static boolean glass = false;
 
     /** Top and bottom fill of a button, row or panel: always solid. */
