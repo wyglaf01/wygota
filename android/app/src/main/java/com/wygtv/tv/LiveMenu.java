@@ -63,8 +63,7 @@ final class LiveMenu {
         pick(a, "★ Favorites", "fav");
         a.sideFixed = 1;
         a.button("⌕ Search", a.side, a::searchLive);
-        if (AirTv.isOn(a.prefs)) a.button("📡 " + AirTv.nameOf(a.prefs), a.side, () -> AirTv.open(a)); // opens Sling (AirTV has no open channel list)
-        if (!Brand.OTA && TabloApp.isOn(a.prefs)) a.button("📡 " + TabloApp.nameOf(a.prefs), a.side, () -> TabloApp.open(a)); // opens the Tablo app (4th Gen)
+                if (!Brand.OTA && TabloApp.isOn(a.prefs)) a.button("📡 " + TabloApp.nameOf(a.prefs), a.side, () -> TabloApp.open(a)); // opens the Tablo app (4th Gen)
         JSONArray mine = VirtualCategories.all(a);
         for (int i = 0; i < mine.length(); i++) {
             JSONObject c = mine.optJSONObject(i);
