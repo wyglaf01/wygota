@@ -814,7 +814,7 @@ final class Menus {
                 });
             }
             String version = Updater.installedName(a);
-            final String about = Brand.NAME + " " + version + (Brand.OTA ? "  •  antenna TV from HDHomeRun and Tablo" : " for Android TV");
+            final String about = Brand.NAME + " " + version + (Brand.OTA ? "  •  antenna TV from HDHomeRun" : " for Android TV");
             row(a, list, "About", about + "  •  made by Wyglaf", () -> aboutDialog(a, about));
         }
         int i = Math.max(0, Math.min(focusIndex, list.getChildCount() - 1));
