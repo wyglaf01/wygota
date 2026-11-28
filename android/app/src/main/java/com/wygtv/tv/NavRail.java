@@ -115,7 +115,7 @@ final class NavRail {
             }
             java.util.List<org.json.JSONObject> tuners = Antenna.tuners(a);
             boolean tabloApp = TabloApp.isOn(a.prefs);
-            if (!tuners.isEmpty() || airTv || tabloApp) entries.put("antenna", () -> {
+            if (!tuners.isEmpty() || tabloApp) entries.put("antenna", () -> {
                 for (org.json.JSONObject t : tuners) { // each HDHomeRun tuner
                     String id = Antenna.PREFIX + t.optString("id");
                     add("📡", Antenna.nameOf(t), id, current, () -> a.showGuide(id, null, true)); // full TV guide of its channels
