@@ -600,10 +600,10 @@ final class Menus {
         JSONObject active = a.library.find(a.library.activeId());
         boolean liveOnly = a.liveOnly();
         if (g.isEmpty()) {
-            if (!Brand.OTA) row(a, list, groupIcon(GROUP_PLAYLISTS) + "  " + groupTitle(GROUP_PLAYLISTS), "playlists, HDHomeRun, Tablo, manage categories, hide and show channels, channel groups, TV guides (EPG)", () -> settingsGroup(a, GROUP_PLAYLISTS));
-            if (Brand.OTA) row(a, list, groupIcon(GROUP_PLAYLISTS) + "  Antenna", "HDHomeRun, Tablo, TV guides", () -> settingsGroup(a, GROUP_PLAYLISTS));
+            if (!Brand.OTA) row(a, list, groupIcon(GROUP_PLAYLISTS) + "  " + groupTitle(GROUP_PLAYLISTS), "playlists, HDHomeRun, AirTV, Tablo, manage categories, hide and show channels, channel groups, TV guides (EPG)", () -> settingsGroup(a, GROUP_PLAYLISTS));
+            if (Brand.OTA) row(a, list, groupIcon(GROUP_PLAYLISTS) + "  Antenna", "HDHomeRun, AirTV, Tablo, TV guides", () -> settingsGroup(a, GROUP_PLAYLISTS));
             row(a, list, groupIcon(GROUP_PLAYER) + "  " + groupTitle(GROUP_PLAYER), "built-in or external player, live stream format, buffer, video decoder, subtitles, watched series, play next", () -> settingsGroup(a, GROUP_PLAYER));
-            row(a, list, groupIcon(GROUP_APPEARANCE) + "  " + groupTitle(GROUP_APPEARANCE), "theme, app mode, main screen, start-up screen, side menu order, Exit button, guide rows, channel order, live preview, movie and series info, IMDb ratings", () -> settingsGroup(a, GROUP_APPEARANCE));
+            row(a, list, groupIcon(GROUP_APPEARANCE) + "  " + groupTitle(GROUP_APPEARANCE), "theme, glass effect, app mode, main screen, start-up screen, side menu order, Exit button, guide rows, channel order, live preview, movie and series info, IMDb ratings", () -> settingsGroup(a, GROUP_APPEARANCE));
             row(a, list, groupIcon(GROUP_BACKUP) + "  " + groupTitle(GROUP_BACKUP), (Brand.STORE ? "back up, restore  •  " : "back up, restore, check for updates  •  ") + Brand.NAME + " " + Updater.installedName(a), () -> settingsGroup(a, GROUP_BACKUP));
         } else if (g.equals(GROUP_PLAYLISTS)) {
             if (!Brand.OTA) row(a, list, "Manage playlists", Manage.playlistSummary(a) + "  •  press OK to add, edit, refresh, delete or turn playlists on and off", () -> { playlistsFromSettings = true; playlists(a); });
@@ -615,18 +615,13 @@ final class Menus {
                     ? "not added  •  press OK to add your tuner. Its channels show in Live TV as " + Antenna.DEFAULT_NAME
                     : (tuners.size() == 1 ? describe(tuners.get(0)) : tuners.size() + " tuners") + "  •  press OK to add, edit, refresh or remove",
                     () -> { if (tuners.isEmpty()) hdhrForm(a, null); else tunerList(a); });
+            final int airRow = list.getChildCount();
+            row(a, list, "AirTV antenna TV", AirTv.summary(a), () -> AirTv.settings(a, () -> settings(a, airRow)));
             final int tabloRow = list.getChildCount();
             if (!Brand.OTA) row(a, list, "Tablo antenna TV", tabloSummary(a), () -> tabloMenu(a, () -> settings(a, tabloRow)));
             final int catsRow = list.getChildCount();
             row(a, list, "Manage categories", Manage.categorySummary(a) + "  •  press OK to tick the categories to show, playlist by playlist",
                     () -> Manage.categories(a, () -> settings(a, catsRow)));
-            final int hiddenRow = list.getChildCount();
-            int hidden = a.hiddenCount();
-            row(a, list, "Show everything again", hidden == 0 ? "nothing hidden" : hidden + " hidden  •  press OK to show every hidden category and channel", () -> {
-                if (a.hiddenCount() == 0) { Toast.makeText(a, "Nothing is hidden.", Toast.LENGTH_SHORT).show(); return; }
-                new Dialogs.Builder(a).setTitle("Show everything again?").setMessage("Every hidden category and channel in this playlist comes back.")
-                        .setPositiveButton("Show all", (d, w) -> { a.unhideAll(); settings(a, hiddenRow); }).setNegativeButton("Cancel", null).show();
-            });
             final int groupsRow = list.getChildCount();
             row(a, list, "Channel groups", VirtualCategories.all(a).length() + " in Live TV  •  press OK to make a New Channel Group, or rename or delete one", () ->
                     VirtualCategories.manage(a, () -> settings(a, groupsRow)));
@@ -746,6 +741,12 @@ final class Menus {
                         a.applyTheme();
                         settings(a, themeRow);
                     }));
+            final int glassRow = list.getChildCount();
+            row(a, list, "Glass effect", onOff(Theme.glass) + "  •  frosted see-through panels and buttons over a softly blurred background. Press OK to switch", () -> {
+                a.prefs.edit().putBoolean(Theme.PREF_GLASS, !Theme.glass).apply();
+                a.applyTheme();
+                settings(a, glassRow);
+            });
             final int modeRow = list.getChildCount();
             if (!Brand.OTA) row(a, list, "App mode", liveOnly ? "Live TV only  •  opens on the TV guide; press OK for the full app" : "Full  •  press OK for Live TV only (opens on the TV guide, hides Movies and Series)", () -> {
                 a.prefs.edit().putBoolean("live_only", !a.liveOnly()).apply();
