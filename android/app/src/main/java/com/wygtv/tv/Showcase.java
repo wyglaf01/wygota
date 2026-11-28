@@ -210,7 +210,7 @@ final class Showcase {
             String aid = Antenna.PREFIX + t.optString("id");
             shortcut(a, row, "📡  " + Antenna.nameOf(t), () -> a.showGuide(aid, null, true));
         }
-        if (AirTv.isOn(a.prefs)) shortcut(a, row, "📡  " + AirTv.nameOf(a.prefs), () -> AirTv.open(a));
+        
         if (TabloApp.isOn(a.prefs)) shortcut(a, row, "📡  " + TabloApp.nameOf(a.prefs), () -> TabloApp.open(a));
         shortcut(a, row, "☰  Playlists", () -> { Menus.playlistsFromSettings = false; a.playlists(); });
         shortcut(a, row, "⚙  Settings", a::settings);
