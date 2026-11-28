@@ -22,7 +22,7 @@ java {
 
 dependencies {
     implementation 'org.json:json:20240303'
-    implementation 'uk.co.caprica:vlcj:4.8.3'
+    implementation 'uk.co.caprica:vlcj:4.12.1'
     testImplementation 'junit:junit:4.13.2'
 }
 
