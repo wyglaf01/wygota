@@ -32,13 +32,15 @@ import androidx.media3.exoplayer.mediacodec.MediaCodecSelector;
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory;
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector;
 
+import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory;
+
 /**
  * Builds every player in the app. Over-the-air TV (HDHomeRun) is MPEG-TS with MPEG-2 video and Dolby
- * AC-3 audio; many tablets and some TV boxes have no AC-3 decoder, so the FFmpeg audio extension
- * (AC-3, E-AC-3, DTS, TrueHD and more) is added. It is only a fallback: the device's own decoders still
- * win when they have one, so HDMI passthrough to a soundbar keeps working. FFmpeg steps in when the
- * device has no decoder for a track, or (see {@link #useFfmpegAudio}) when the device's audio decoder
- * fails while playing.
+ * AC-3 audio; many tablets and some TV boxes have no hardware MPEG-2 or AC-3 decoder. NextLib's FFmpeg
+ * extension supplies software decoders for MPEG-2 video (and H.264/HEVC/VP9/etc.) plus audio (AC-3,
+ * E-AC-3, DTS, TrueHD and more). It is only a fallback: the device's own decoders still win when they
+ * have one, so HDMI passthrough to a soundbar keeps working. FFmpeg steps in when the device has no
+ * decoder for a track, or (see {@link #useFfmpegAudio}) when the device's audio decoder fails while playing.
  * The renderer settings are Media3 "unstable" API, which is opted into here.
  */
 @OptIn(markerClass = UnstableApi.class)
@@ -91,7 +93,7 @@ final class Players {
     }
 
     private static ExoPlayer create(Context c, int bufferSeconds, String decoder) {
-        DefaultRenderersFactory renderers = new DefaultRenderersFactory(c)
+        NextRenderersFactory renderers = new NextRenderersFactory(c)
                 .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
                 .setEnableDecoderFallback(true)
                 .setMediaCodecSelector(codecs(decoder));
