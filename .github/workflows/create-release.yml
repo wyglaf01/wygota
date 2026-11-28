@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version tag (e.g. 1.0.71)'
+        description: 'Version number only, without the v prefix (example: 1.0.72). This becomes the tag v1.0.72 and the release title WygOTA 1.0.72.'
         required: true
         type: string
       notes:
-        description: 'Release notes'
+        description: 'Release notes shown on the GitHub release page. Use plain text or Markdown. A Full Changelog link is added automatically. Leave blank to use the default text.'
         required: false
         type: string
         default: 'Desktop builds (Ubuntu + Windows) added.\n\n- Minimal desktop entry point (OtaDesktop)\n- Website download buttons for Ubuntu and Windows'
