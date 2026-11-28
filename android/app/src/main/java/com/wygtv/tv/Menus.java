@@ -615,8 +615,6 @@ final class Menus {
                     ? "not added  •  press OK to add your tuner. Its channels show in Live TV as " + Antenna.DEFAULT_NAME
                     : (tuners.size() == 1 ? describe(tuners.get(0)) : tuners.size() + " tuners") + "  •  press OK to add, edit, refresh or remove",
                     () -> { if (tuners.isEmpty()) hdhrForm(a, null); else tunerList(a); });
-            final int airRow = list.getChildCount();
-            row(a, list, "AirTV antenna TV", AirTv.summary(a), () -> AirTv.settings(a, () -> settings(a, airRow)));
             final int tabloRow = list.getChildCount();
             if (!Brand.OTA) row(a, list, "Tablo antenna TV", tabloSummary(a), () -> tabloMenu(a, () -> settings(a, tabloRow)));
             final int catsRow = list.getChildCount();
@@ -741,12 +739,6 @@ final class Menus {
                         a.applyTheme();
                         settings(a, themeRow);
                     }));
-            final int glassRow = list.getChildCount();
-            row(a, list, "Glass effect", onOff(Theme.glass) + "  •  frosted see-through panels and buttons over a softly blurred background. Press OK to switch", () -> {
-                a.prefs.edit().putBoolean(Theme.PREF_GLASS, !Theme.glass).apply();
-                a.applyTheme();
-                settings(a, glassRow);
-            });
             final int modeRow = list.getChildCount();
             if (!Brand.OTA) row(a, list, "App mode", liveOnly ? "Live TV only  •  opens on the TV guide; press OK for the full app" : "Full  •  press OK for Live TV only (opens on the TV guide, hides Movies and Series)", () -> {
                 a.prefs.edit().putBoolean("live_only", !a.liveOnly()).apply();
