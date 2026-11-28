@@ -4,7 +4,7 @@ package com.wygtv.tv;
  * Colour themes picked in Settings (Royal blue & bronze unless changed). Every theme follows the royal blue & bronze style:
  * a deep main colour for panels and focus, with bronze (or gold) trim, headings and focused tiles. Themes keep the
  * original brass-on-leather artwork; the others wash the artwork in their own colour.
- * Settings > Appearance > Glass effect turns panels and buttons into frosted see-through glass (see {@link #glass}).
+ * Panels and buttons always use the solid (non-glass) style.
  */
 final class Theme {
     static final String[] KEYS = {"royal", "cyan", "green", "brown", "gold"};
@@ -52,31 +52,26 @@ final class Theme {
         return k == null || k.equals("blue") ? DEFAULT : k;
     }
 
-    /** Settings > Appearance > Glass effect: frosted see-through panels and buttons over a blurred backdrop. */
+    /** Glass effect is disabled; solid panels are always used. */
     static final String PREF_GLASS = "glass_effect";
-    static boolean glass;
+    static boolean glass = false;
 
-    /** Top and bottom fill of a button, row or panel: solid, or see-through glass with a light sheen on top. */
+    /** Top and bottom fill of a button, row or panel: always solid. */
     static int[] surface(boolean focused) {
-        if (glass) return focused
-                ? new int[]{alpha(mix(FOCUS, 0xffffffff, 0.18f), 0xb8), alpha(FOCUS, 0x8c)}
-                : new int[]{alpha(mix(PANEL, 0xffffffff, 0.14f), 0x5c), alpha(mix(PANEL, BG, 0.5f), 0x3d)};
         return focused
                 ? new int[]{mix(FOCUS, 0xffffffff, 0.10f), FOCUS}
                 : new int[]{alpha(PANEL, 0xf2), alpha(mix(PANEL, BG, 0.55f), 0xf2)};
     }
 
-    /** The thin edge around a button, row or panel. Glass gets a frosted light edge, solid gets bronze. */
+    /** The thin edge around a button, row or panel. */
     static int edge(boolean focused) {
         if (focused) return STROKE_FOCUS;
-        return glass ? alpha(mix(STROKE_FOCUS, 0xffffffff, 0.45f), 0x73) : alpha(STROKE, 0xb3);
+        return alpha(STROKE, 0xb3);
     }
 
-    /** A panel colour with the glass see-through applied (alpha scaled down when the glass effect is on). */
+    /** A panel colour (no glass see-through). */
     static int pane(int color) {
-        if (!glass) return color;
-        int a = color >>> 24;
-        return alpha(color, Math.round(a * 0.55f));
+        return color;
     }
 
     static boolean steampunk() { return false; }
