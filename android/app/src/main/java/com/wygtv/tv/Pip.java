@@ -25,6 +25,9 @@ final class Pip {
     /** Set while the app is in picture-in-picture. */
     static boolean inPip;
 
+    /** Picture-in-picture is turned off for now to avoid issues seen in other WygTV editions; set true to bring it back. */
+    private static final boolean ENABLED = false;
+
     private Pip() { }
 
     static boolean supported(MainActivity a) {
@@ -35,8 +38,7 @@ final class Pip {
 
     /** Shrinks the playing channel or movie (full screen, or the mini player) into a picture-in-picture window. */
     static boolean enter(MainActivity a) {
-        return false; // PiP disabled to avoid issues seen in other WygTV editions
-        //if (!supported(a)) return false;
+        if (!ENABLED || !supported(a)) return false;
         if (MiniPlayer.active()) MiniPlayer.expand(a);
         if (a.player == null || !a.mode.equals("player")) return false;
         try { return enter26(a); } catch (Exception e) { return false; }
@@ -60,8 +62,8 @@ final class Pip {
     }
 
     /** Home pressed (the app is about to go to the background). */
-    static void onUserLeaveHint(MainActivity a) { return; /* PiP disabled */
-        if (!onHome(a.prefs) || !supported(a)) return;
+    static void onUserLeaveHint(MainActivity a) {
+        if (!ENABLED || !onHome(a.prefs) || !supported(a)) return;
         boolean playing = (a.player != null && a.mode.equals("player") && a.player.getPlayWhenReady()) || MiniPlayer.active();
         if (playing) enter(a);
     }
