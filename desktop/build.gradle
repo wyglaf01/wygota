@@ -20,7 +20,59 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+sourceSets {
+    main {
+        java {
+            // Share pure-Java HDHomeRun / Tablo / guide code from the Android app
+            srcDir '../android/app/src/main/java'
+            exclude '**/MainActivity.java'
+            exclude '**/AutoRefresh.java'
+            exclude '**/Backup.java'
+            exclude '**/Brand.java'
+            exclude '**/ChannelIcons.java'
+            exclude '**/Details.java'
+            exclude '**/Dialogs.java'
+            exclude '**/EpgGrid.java'
+            exclude '**/Episodes.java'
+            exclude '**/ExternalPlayer.java'
+            exclude '**/FocusWrap.java'
+            exclude '**/GuideOptions.java'
+            exclude '**/LiveMenu.java'
+            exclude '**/LivePreview.java'
+            exclude '**/Manage.java'
+            exclude '**/MasterSearch.java'
+            exclude '**/MenuIcons.java'
+            exclude '**/MenuOrder.java'
+            exclude '**/Menus.java'
+            exclude '**/MiniGuide.java'
+            exclude '**/MiniPlayer.java'
+            exclude '**/NavRail.java'
+            exclude '**/Pip.java'
+            exclude '**/Players.java'
+            exclude '**/PosterDetails.java'
+            exclude '**/PosterGrid.java'
+            exclude '**/RemoteKeys.java'
+            exclude '**/Showcase.java'
+            exclude '**/Skin.java'
+            exclude '**/SubSources.java'
+            exclude '**/Subtitles.java'
+            exclude '**/TabloApp.java'
+            exclude '**/Theme.java'
+            exclude '**/TreeMenu.java'
+            exclude '**/TvGuide.java'
+            exclude '**/TvRemote.java'
+            exclude '**/Updater.java'
+            exclude '**/VirtualCategories.java'
+            exclude '**/VodMenu.java'
+            exclude '**/VodSearch.java'
+            exclude '**/Watch.java'
+        }
+    }
+}
+
 dependencies {
+    implementation 'org.json:json:20240303'
+    implementation 'uk.co.caprica:vlcj:4.8.3'
     testImplementation 'junit:junit:4.13.2'
 }
 
