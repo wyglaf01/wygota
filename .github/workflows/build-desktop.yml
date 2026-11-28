@@ -1,0 +1,63 @@
+name: Build Desktop (Ubuntu + Windows)
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            artifact: wygota-ubuntu.tar.gz
+          - os: windows-latest
+            artifact: wygota-windows.zip
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build distribution
+        working-directory: desktop
+        run: |
+          gradle wrapper --gradle-version 8.11.1
+          chmod +x gradlew || true
+          ./gradlew installDist
+
+      - name: Package Ubuntu
+        if: runner.os == 'Linux'
+        run: |
+          tar -czf wygota-ubuntu.tar.gz -C desktop/build/install wygota
+
+      - name: Package Windows
+        if: runner.os == 'Windows'
+        run: |
+          Compress-Archive -Path desktop/build/install/wygota -DestinationPath wygota-windows.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ runner.os }}
+          path: |
+            wygota-ubuntu.tar.gz
+            wygota-windows.zip
+
+      - name: Attach to release (on tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            wygota-ubuntu.tar.gz
+            wygota-windows.zip
