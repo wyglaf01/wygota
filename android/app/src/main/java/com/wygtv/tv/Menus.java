@@ -748,12 +748,7 @@ final class Menus {
                         a.applyTheme();
                         settings(a, themeRow);
                     }));
-            final int glassRow = list.getChildCount();
-            row(a, list, "Glass effect", onOff(Theme.glass) + "  •  frosted see-through panels and buttons over a softly blurred background. Press OK to switch", () -> {
-                a.prefs.edit().putBoolean(Theme.PREF_GLASS, !Theme.glass).apply();
-                a.applyTheme();
-                settings(a, glassRow);
-            });
+            // Glass effect removed — standard solid panels are always used.
             final int modeRow = list.getChildCount();
             if (!Brand.OTA) row(a, list, "App mode", liveOnly ? "Live TV only  •  opens on the TV guide; press OK for the full app" : "Full  •  press OK for Live TV only (opens on the TV guide, hides Movies and Series)", () -> {
                 a.prefs.edit().putBoolean("live_only", !a.liveOnly()).apply();
