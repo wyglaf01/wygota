@@ -114,14 +114,13 @@ final class NavRail {
                 entries.put("series", () -> add("▤", "Series", "series", current, () -> a.browseVod("series")));
             }
             java.util.List<org.json.JSONObject> tuners = Antenna.tuners(a);
-            boolean airTv = AirTv.isOn(a.prefs), tabloApp = TabloApp.isOn(a.prefs);
+            boolean tabloApp = TabloApp.isOn(a.prefs);
             if (!tuners.isEmpty() || airTv || tabloApp) entries.put("antenna", () -> {
                 for (org.json.JSONObject t : tuners) { // each HDHomeRun tuner
                     String id = Antenna.PREFIX + t.optString("id");
                     add("📡", Antenna.nameOf(t), id, current, () -> a.showGuide(id, null, true)); // full TV guide of its channels
                 }
-                if (airTv) add("📡", AirTv.nameOf(a.prefs), "airtv", current, () -> AirTv.open(a)); // opens the Sling app
-                if (tabloApp) add("📡", TabloApp.nameOf(a.prefs), "tabloapp", current, () -> TabloApp.open(a)); // opens the Tablo app (4th Gen)
+                                if (tabloApp) add("📡", TabloApp.nameOf(a.prefs), "tabloapp", current, () -> TabloApp.open(a)); // opens the Tablo app (4th Gen)
             });
             entries.put("msearch", () -> add("⌕", "Search", "msearch", current, () -> MasterSearch.show(a)));
             entries.put("playlists", () -> add("☰", "Playlists", "playlists", current, () -> { Menus.playlistsFromSettings = false; a.playlists(); }));
