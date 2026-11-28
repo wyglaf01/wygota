@@ -21,13 +21,19 @@ final class TabloApp {
     static final String PREF_ON = "tablo_app_on", PREF_NAME = "tablo_app_name";
     static final String DEFAULT_NAME = "Tablo";
 
+    static String cleanName(String raw) {
+        String s = raw == null ? "" : raw.trim();
+        if (s.isEmpty()) return DEFAULT_NAME;
+        return s.substring(0, 1).toUpperCase(java.util.Locale.getDefault()) + s.substring(1);
+    }
+
     private TabloApp() { }
 
     static boolean isOn(SharedPreferences p) { return p.getBoolean(PREF_ON, false); }
 
     static String nameOf(SharedPreferences p) {
         String raw = p.getString(PREF_NAME, "").trim();
-        return raw.isEmpty() ? DEFAULT_NAME : AirTv.cleanName(raw);
+        return raw.isEmpty() ? DEFAULT_NAME : cleanName(raw);
     }
 
     /**
@@ -127,7 +133,7 @@ final class TabloApp {
         new Dialogs.Builder(a).setTitle("Name for your Tablo button").setView(field)
                 .setPositiveButton("Save", (d, w) -> {
                     String n = field.getText().toString().trim();
-                    a.prefs.edit().putString(PREF_NAME, n.isEmpty() ? DEFAULT_NAME : AirTv.cleanName(n)).apply();
+                    a.prefs.edit().putString(PREF_NAME, n.isEmpty() ? DEFAULT_NAME : cleanName(n)).apply();
                     redraw.run();
                 })
                 .setNegativeButton("Cancel", null).show();
