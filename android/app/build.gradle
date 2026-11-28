@@ -63,5 +63,5 @@ dependencies {
     implementation 'androidx.media3:media3-ui:1.9.1'
     implementation 'androidx.media3:media3-exoplayer-hls:1.9.1'
     // FFmpeg audio + video (MPEG-2, H.264, etc.) for HDHomeRun OTA on devices without hardware decoders
-    implementation 'io.github.anilbeesetti:nextlib-media3ext:1.9.1-0.11.0'
+    implementation 'io.github.anilbeesetti:nextlib-media3ext:1.11.1-0.19.0'
 }
