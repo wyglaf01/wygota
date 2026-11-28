@@ -305,14 +305,19 @@ final class Menus {
         EditText host = a.field(form, "Tuner address: hdhomerun.local or its IP, e.g. 192.168.1.50", addr);
         host.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
         EditText epg = a.field(form, "TV guide (XMLTV) link, optional: leave empty to use the HDHomeRun guide", existing == null ? "" : existing.optString("epg"));
+        // Find tuners first so it is the top option on startup
+        form.removeAllViews();
+        a.button("⌕  Find tuners on my network", form, () -> findTuners(a, existing, title, host, epg));
+        form.addView(title);
+        form.addView(host);
+        form.addView(epg);
         note(a, form, "Channels come from the tuner's lineup (the same list as http://hdhomerun.local/lineup.html), grouped by channel number. "
                 + "The TV guide comes from SiliconDust's free HDHomeRun guide. If hdhomerun.local isn't found, press Find tuners or type the tuner's IP address "
                 + "(shown in your router, or at my.hdhomerun.com).");
         TextView connect = a.button("Save & load channels", form, () -> connectTuner(a, existing, title.getText().toString().trim(), host.getText().toString(), epg.getText().toString().trim()));
-        a.button("⌕  Find tuners on my network", form, () -> findTuners(a, existing, title, host, epg));
         if (existing == null) a.button("📡  I have a Tablo instead", form, () -> tabloMenu(a, () -> { if (a.library.isEmpty()) hdhrForm(a, null); else backToTuners(a); }));
         a.button("Cancel", form, () -> { if (!a.library.isEmpty()) backToTuners(a); else if (Brand.OTA) a.finish(); else setup(a); });
-        (existing == null ? connect : host).requestFocus();
+        form.getChildAt(0).requestFocus(); // Find tuners is first
     }
 
     /** Settings > HDHomeRun antenna TV once a tuner is added: pick a tuner, or add another. */
