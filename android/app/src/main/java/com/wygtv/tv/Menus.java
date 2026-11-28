@@ -748,7 +748,6 @@ final class Menus {
                         a.applyTheme();
                         settings(a, themeRow);
                     }));
-            // Glass effect removed — standard solid panels are always used.
             final int modeRow = list.getChildCount();
             if (!Brand.OTA) row(a, list, "App mode", liveOnly ? "Live TV only  •  opens on the TV guide; press OK for the full app" : "Full  •  press OK for Live TV only (opens on the TV guide, hides Movies and Series)", () -> {
                 a.prefs.edit().putBoolean("live_only", !a.liveOnly()).apply();
