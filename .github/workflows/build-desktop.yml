@@ -44,6 +44,8 @@ jobs:
       - name: Package Ubuntu
         if: runner.os == 'Linux'
         run: |
+          cp desktop-scripts/install.sh desktop/build/install/wygota/
+          chmod +x desktop/build/install/wygota/install.sh
           tar -czf wygota-ubuntu.tar.gz -C desktop/build/install wygota
 
       - name: Package Windows
