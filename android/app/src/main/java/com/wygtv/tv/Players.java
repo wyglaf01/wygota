@@ -50,7 +50,7 @@ final class Players {
     /** Settings: how many seconds to load before a stream starts (and after it runs dry) for the main player. */
     static final String PREF_BUFFER = "play_buffer";
     static final String[] BUFFER_KEYS = {"off", "small", "medium", "large"};
-    static final String[] BUFFER_LABELS = {"Off  •  starts fastest", "Small  •  5 seconds (recommended)", "Medium  •  10 seconds", "Large  •  20 seconds"};
+    static final String[] BUFFER_LABELS = {"Off  \u2022  starts fastest", "Small  \u2022  5 seconds (recommended)", "Medium  \u2022  10 seconds", "Large  \u2022  20 seconds"};
     static final String BUFFER_DEFAULT = "small";
 
     /** Settings: which video decoders to try first. */
@@ -93,7 +93,8 @@ final class Players {
     }
 
     private static ExoPlayer create(Context c, int bufferSeconds, String decoder) {
-        NextRenderersFactory renderers = new NextRenderersFactory(c)
+        // NextRenderersFactory extends DefaultRenderersFactory; the fluent setters return the parent type.
+        DefaultRenderersFactory renderers = new NextRenderersFactory(c)
                 .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
                 .setEnableDecoderFallback(true)
                 .setMediaCodecSelector(codecs(decoder));
@@ -114,7 +115,7 @@ final class Players {
     }
 
     /**
-     * A legacy Tablo channel's playlist link is a stand-in (…/guide/channels/ID/watch.m3u8): as the player opens it, ask
+     * A legacy Tablo channel's playlist link is a stand-in (\u2026/guide/channels/ID/watch.m3u8): as the player opens it, ask
      * the Tablo to tune the channel and read its real HLS link instead. Every other link passes through unchanged.
      */
     static DataSource.Factory tabloResolving(DataSource.Factory upstream) {
