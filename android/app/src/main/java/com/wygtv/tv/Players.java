@@ -2,10 +2,12 @@ package com.wygtv.tv;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.annotation.OptIn;
 import androidx.media3.common.C;
@@ -42,6 +44,9 @@ import io.github.anilbeesetti.nextlib.media3ext.ffdecoder.NextRenderersFactory;
  * have one, so HDMI passthrough to a soundbar keeps working. FFmpeg steps in when the device has no
  * decoder for a track, or (see {@link #useFfmpegAudio}) when the device's audio decoder fails while playing.
  * The renderer settings are Media3 "unstable" API, which is opted into here.
+ *
+ * Onn (Walmart) streamers have buggy hardware MPEG-2 decoders that can reboot the device. Those boxes
+ * always use pure software decoding and a smaller buffer.
  */
 @OptIn(markerClass = UnstableApi.class)
 final class Players {
@@ -58,6 +63,17 @@ final class Players {
     static final String[] DECODER_KEYS = {"auto", "hardware", "software"};
     static final String[] DECODER_LABELS = {"Automatic (device default)", "Hardware first", "Software first (recommended)"};
     static final String DECODER_DEFAULT = "software";
+
+    /** True for Onn / Walmart streamers whose hardware MPEG-2 decoder can reboot the device. */
+    static boolean isOnn(Context c) {
+        String brand = Build.BRAND == null ? "" : Build.BRAND.toLowerCase(Locale.US);
+        String manufacturer = Build.MANUFACTURER == null ? "" : Build.MANUFACTURER.toLowerCase(Locale.US);
+        String model = Build.MODEL == null ? "" : Build.MODEL.toLowerCase(Locale.US);
+        String device = Build.DEVICE == null ? "" : Build.DEVICE.toLowerCase(Locale.US);
+        return brand.contains("onn") || manufacturer.contains("onn")
+                || model.contains("onn") || device.contains("onn")
+                || model.contains("streaming device") || device.contains("jarvis") || device.contains("sna");
+    }
 
     /** Seconds loaded before playback starts for a buffer choice; 0 keeps Media3's own 2.5 s start. */
     static int bufferSeconds(String key) {
@@ -85,14 +101,26 @@ final class Players {
 
     /** The full-screen player, with the buffer and decoder chosen in Settings. */
     static ExoPlayer create(Context c, SharedPreferences prefs) {
-        return create(c, bufferSeconds(prefs.getString(PREF_BUFFER, BUFFER_DEFAULT)), prefs.getString(PREF_DECODER, DECODER_DEFAULT));
+        int seconds = bufferSeconds(prefs.getString(PREF_BUFFER, BUFFER_DEFAULT));
+        String decoder = prefs.getString(PREF_DECODER, DECODER_DEFAULT);
+        // Onn: force software and keep the buffer small so the vendor decoder never runs.
+        if (isOnn(c)) {
+            seconds = Math.min(seconds, 5);
+            decoder = "software";
+        }
+        return create(c, seconds, decoder);
     }
 
     private static ExoPlayer create(Context c, int bufferSeconds) {
-        return create(c, bufferSeconds, c.getSharedPreferences("wygtv", Context.MODE_PRIVATE).getString(PREF_DECODER, DECODER_DEFAULT));
+        String decoder = c.getSharedPreferences("wygtv", Context.MODE_PRIVATE).getString(PREF_DECODER, DECODER_DEFAULT);
+        if (isOnn(c)) decoder = "software";
+        return create(c, bufferSeconds, decoder);
     }
 
     private static ExoPlayer create(Context c, int bufferSeconds, String decoder) {
+        // Onn always uses software-only video to avoid reboots from the vendor MPEG-2 decoder.
+        if (isOnn(c)) decoder = "software";
+
         // NextRenderersFactory extends DefaultRenderersFactory; the fluent setters return the parent type.
         DefaultRenderersFactory renderers = new NextRenderersFactory(c)
                 .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
